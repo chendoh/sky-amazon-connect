@@ -1,0 +1,9 @@
+instance_alias       = "immawalts-contact-center"
+inbound_flow_name    = "tf-InboundFlow"
+contact_flow_name    = "tf-Main-Flow"
+admin_user           = "walters"
+admin_phone_number   = ""
+aws_region           = "us-east-1"
+aws_profile          = "default"
+outbound_calls_enabled = true
+inbound_calls_enabled  = true
