@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    on-failure: ABORT
+    commands:
+      - set -e
+      - DEFAULT_PATH=$(pwd)
+      - TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+      - echo "Installing Terraform"
+      - sudo yum install -y yum-utils
+      - sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+      - sudo yum -y install terraform
+      - terraform --version
+      - echo `aws sts get-caller-identity`
+  
+  build:
+    on-failure: CONTINUE
+    commands:
+      - cd connect-resources
+      - terraform init
+      - terraform apply -auto-approve
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: yes
