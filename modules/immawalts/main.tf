@@ -11,27 +11,68 @@ output "connect_instance_id" {
   value = aws_connect_instance.connect_instance.id
 }
 
-# Create the Amazon Connect Contact Flow
-resource "aws_connect_contact_flow" "immawalts_main" {
-  instance_id = aws_connect_instance.connect_instance.id  # Reference the Connect instance ID directly
-  name        = "immawalts_main"
-  content     = <<EOF
-{
-  "Version": "1.0",
-  "Content": {
-    "Version": "1.0",
-    "StartAction": "PlayPrompt",
-    "Actions": [
-      {
-        "ActionType": "PlayPrompt",
-        "Parameters": {
-          "Text": "Welcome to Amazon Connect!"
-        }
-      }
-    ]
+resource "aws_secretsmanager_secret" "user_credentials" {
+  name        = "immawalts_user_credentials"
+  description = "Store username and password for Amazon Connect user"
+
+  tags = {
+    "Environment" = "Production"
   }
 }
-EOF
-  type = "CONTACT_FLOW"
+
+resource "aws_secretsmanager_secret_version" "user_credentials_version" {
+  secret_id     = aws_secretsmanager_secret.user_credentials.id
+  secret_string = jsonencode({
+    username = "immawalts_user"
+    password = " "
+  })
 }
 
+
+resource "aws_iam_policy" "github_actions_policy" {
+  name        = "GitHubActionsPolicy"
+  description = "Policy to allow GitHub Actions to manage Amazon Connect resources"
+  
+  # Adjust the permissions according to your needs
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = [
+          "connect:CreateContactFlow",
+          "connect:UpdateContactFlow",
+          "connect:DescribeContactFlow",
+          "connect:ListContactFlows",
+          "connect:DeleteContactFlow",
+          "iam:ListRoles",
+          "cloudwatch:PutMetricData",
+          "s3:PutObject",
+          "s3:GetObject"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role" "github_actions_role" {
+  name               = "GitHubActionsRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "sts.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_attach" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = aws_iam_policy.github_actions_policy.arn
+}
