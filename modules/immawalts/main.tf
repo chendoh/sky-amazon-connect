@@ -23,7 +23,7 @@ resource "aws_secretsmanager_secret" "user_credentials" {
 resource "aws_secretsmanager_secret_version" "user_credentials_version" {
   secret_id     = aws_secretsmanager_secret.user_credentials.id
   secret_string = jsonencode({
-    username = "immawalts"
+    username = "immawalters"
     password = " "
   })
 }
