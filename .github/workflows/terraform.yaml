@@ -1,41 +1,33 @@
-name: Deploy to Amazon Connect with Terraform
+name: Terraform Workflow
 
 on:
   push:
     branches:
-      - main  # Trigger the workflow when code is pushed to the main branch
+      - main  # Trigger on push to the main branch
 
 jobs:
   terraform:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # You can specify the appropriate runner
 
     steps:
-      # Checkout the code from the repository
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      # Set up AWS CLI
-      - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: "us-east-1"  # Set to your desired AWS region
+    - name: Set up AWS credentials
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+      run: |
+        aws sts get-caller-identity  # This will test if AWS CLI is correctly configured
 
-      # Set up Terraform
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: '1.5.7'  # Specify the version of Terraform to use
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: '1.0.0'  # Specify the required Terraform version
 
-      # Initialize Terraform
-      - name: Terraform Init
-        run: terraform init
+    - name: Terraform Init
+      run: terraform init
 
-      # Plan Terraform changes
-      - name: Terraform Plan
-        run: terraform plan
-
-      # Apply Terraform changes
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
