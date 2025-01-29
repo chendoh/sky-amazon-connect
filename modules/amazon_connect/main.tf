@@ -7,3 +7,52 @@ resource "aws_connect_instance" "connect_instance" {
 
   tags = var.tags
 }
+
+
+# Amazon Connect Admin User
+resource "aws_connect_user" "admin_user" {
+  instance_id     = aws_connect_instance.connect_instance.id
+  hierarchy_group_id = null  # Set if using hierarchy groups
+  routing_profile_id = aws_connect_routing_profile.admin_routing_profile.id
+  security_profile_ids = [aws_connect_security_profile.admin_profile.id]
+  name            = var.admin_user_name
+  password        = var.admin_user_password
+  identity_info {
+    first_name = var.admin_first_name
+    last_name  = var.admin_last_name
+  }
+  phone_config {
+    phone_type       = "SOFT_PHONE"
+    auto_accept      = true
+    after_contact_work_time_limit = 0
+  }
+}
+
+# Amazon Connect Security Profile (Admin)
+resource "aws_connect_security_profile" "admin_profile" {
+  instance_id = aws_connect_instance.connect_instance.id
+  name        = "AdminProfile"
+  description = "Admin profile with full permissions"
+}
+
+# Amazon Connect Routing Profile
+resource "aws_connect_routing_profile" "admin_routing_profile" {
+  instance_id = aws_connect_instance.connect_instance.id
+  name        = "AdminRoutingProfile"
+  description = "Routing profile for admin users"
+
+  default_outbound_queue_id = aws_connect_queue.default_queue.id
+
+  media_concurrencies {
+    channel = "VOICE"
+    concurrency = 1
+  }
+}
+
+# Amazon Connect Default Queue
+resource "aws_connect_queue" "default_queue" {
+  instance_id = aws_connect_instance.connect_instance.id
+  name        = "Default Queue"
+  description = "Default queue for Amazon Connect instance"
+  status      = "ENABLED"
+}
