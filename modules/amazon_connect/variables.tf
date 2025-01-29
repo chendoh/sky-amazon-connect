@@ -30,3 +30,27 @@ variable "tags" {
     Environment = "Dev"
   }
 }
+
+variable "admin_user_name" {
+  description = "Amazon Connect admin username."
+  type        = string
+  default     = "wndoh"
+}
+
+variable "admin_user_password" {
+  description = "Amazon Connect admin password."
+  type        = string
+  sensitive   = true
+}
+
+variable "admin_first_name" {
+  description = "Admin user's first name."
+  type        = string
+  default     = "Walters"
+}
+
+variable "admin_last_name" {
+  description = "Admin user's last name."
+  type        = string
+  default     = "Ndoh"
+}
