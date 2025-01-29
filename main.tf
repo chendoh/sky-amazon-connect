@@ -5,10 +5,4 @@ module "amazon_connect" {
   outbound_calls_enabled   = var.outbound_calls_enabled
   instance_alias           = var.instance_alias
   tags                     = var.tags
-
-
-  admin_user_name      = var.admin_user_name
-  admin_user_password  = var.admin_user_password
-  admin_first_name     = var.admin_first_name
-  admin_last_name      = var.admin_last_name
 }
