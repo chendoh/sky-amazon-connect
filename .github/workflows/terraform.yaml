@@ -3,7 +3,8 @@ name: Deploy Terraform to AWS
 on:
   push:
     branches:
-      - main  # Change this if needed
+      - main  # Change if needed
+  workflow_dispatch:  # Allows manual execution (useful for destroy)
 
 permissions:
   id-token: write  # Required for OIDC authentication
@@ -40,3 +41,29 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
+
+  destroy:
+    name: Terraform Destroy
+    runs-on: ubuntu-latest
+    if: github.event.inputs.destroy == 'true'  # Runs only if manually triggered with input 'destroy'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
