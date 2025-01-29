@@ -27,25 +27,3 @@ resource "aws_connect_user" "admin_user" {
     after_contact_work_time_limit = 0
   }
 }
-
-# Amazon Connect Security Profile (Admin)
-resource "aws_connect_security_profile" "admin_profile" {
-  instance_id = aws_connect_instance.connect_instance.id
-  name        = "AdminProfile"
-  description = "Admin profile with full permissions"
-}
-
-# Amazon Connect Routing Profile
-resource "aws_connect_routing_profile" "admin_routing_profile" {
-  instance_id = aws_connect_instance.connect_instance.id
-  name        = "AdminRoutingProfile"
-  description = "Routing profile for admin users"
-
-  default_outbound_queue_id = aws_connect_queue.default_queue.id
-
-  media_concurrencies {
-    channel = "VOICE"
-    concurrency = 1
-  }
-}
-
