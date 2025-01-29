@@ -1,9 +1,0 @@
-output "amazon_connect_instance_id" {
-  description = "Amazon Connect instance ID."
-  value       = module.amazon_connect.amazon_connect_instance_id
-}
-
-output "amazon_connect_instance_arn" {
-  description = "Amazon Connect instance ARN."
-  value       = module.amazon_connect.amazon_connect_instance_arn
-}
