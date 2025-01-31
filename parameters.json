@@ -1,0 +1,7 @@
+- name: Deploy CloudFormation Stack with Parameters
+run: |
+  aws cloudformation deploy \
+    --stack-name amazon-connect-stack \
+    --template-file templates/amazon-connect-instance.yaml \
+    --capabilities CAPABILITY_NAMED_IAM \
+    --parameter-overrides file://parameters.json

@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create an Amazon Connect Instance
+
+Resources:
+  ConnectInstance:
+    Type: AWS::Connect::Instance
+    Properties:
+      IdentityManagementType: "CONNECT_MANAGED"  # Amazon Connect manages users
+      InstanceAlias: "my-connect-instance"  # Change to your alias
+      AutoEnableContactLens: true  # Enables Contact Lens (optional)
+      InboundCallsEnabled: true  # Allow inbound calls
+      OutboundCallsEnabled: true  # Allow outbound calls
+
+Outputs:
+  ConnectInstanceId:
+    Description: Amazon Connect Instance ID
+    Value: !Ref ConnectInstance
+  ConnectInstanceArn:
+    Description: Amazon Connect Instance ARN
+    Value: !GetAtt ConnectInstance.Arn
