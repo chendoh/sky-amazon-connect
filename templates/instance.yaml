@@ -7,6 +7,10 @@ Resources:
     Properties:
       IdentityManagementType: "CONNECT_MANAGED"  # Amazon Connect manages users
       InstanceAlias: "immawalts-connect-instance"  # Change to your desired alias
+      Attributes:
+        InboundCalls: true
+        OutboundCalls: true
+        ContactLens: false  # Set to true if you want to enable Contact Lens
 
 Outputs:
   ConnectInstanceId:
