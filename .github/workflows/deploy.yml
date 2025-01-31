@@ -25,5 +25,5 @@ jobs:
         run: |
           aws cloudformation deploy \
             --stack-name amazon-connect-stack \
-            --template-file templates/amazon-connect-instance.yaml \
+            --template-file templates/instance.yaml \
             --capabilities CAPABILITY_NAMED_IAM
