@@ -1,5 +1,5 @@
 {
-  "name": "Deploy Amazon Connect with CloudFormation",
+  "name": "Deploy Amazon Connect with Contact Flow",
   "on": {
     "push": {
       "branches": ["main"]
@@ -26,6 +26,10 @@
         {
           "name": "Deploy CloudFormation Stack",
           "run": "aws cloudformation deploy --stack-name amazon-connect-stack --template-file templates/instance.json --capabilities CAPABILITY_NAMED_IAM"
+        },
+        {
+          "name": "Upload Contact Flow",
+          "run": "aws connect create-contact-flow --instance-id $(aws cloudformation describe-stacks --stack-name amazon-connect-stack --query 'Stacks[0].Outputs[?OutputKey==`ConnectInstanceId`].OutputValue' --output text) --name 'SimpleWelcomeFlow' --type 'CONTACT_FLOW' --content file://templates/contact-flow.json --description 'A simple welcome contact flow'"
         }
       ]
     }

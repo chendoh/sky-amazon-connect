@@ -1,0 +1,19 @@
+{
+    "Version": "2019-10-30",
+    "StartAction": "Entry",
+    "Actions": [
+      {
+        "Identifier": "PlayPrompt",
+        "Type": "Message",
+        "Parameters": {
+          "Text": "Welcome to our support line. Please hold while we connect you."
+        }
+      }
+    ],
+    "Connections": {
+      "Entry": {
+        "NextAction": "PlayPrompt"
+      }
+    }
+  }
+  

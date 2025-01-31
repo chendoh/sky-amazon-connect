@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Create an Amazon Connect Instance",
+  "Description": "Create an Amazon Connect Instance with a Simple Contact Flow",
   "Resources": {
     "ConnectInstance": {
       "Type": "AWS::Connect::Instance",
@@ -9,27 +9,34 @@
         "InstanceAlias": "my-connect-instance",
         "Attributes": {
           "InboundCalls": true,
-          "OutboundCalls": false,
+          "OutboundCalls": true,
           "ContactLens": false
         }
+      }
+    },
+    "ImmawaltsContactFlow": {
+      "Type": "AWS::Connect::ContactFlow",
+      "Properties": {
+        "InstanceArn": { "Fn::GetAtt": ["ConnectInstance", "Arn"] },
+        "Name": "SimpleWelcomeFlow",
+        "Type": "CONTACT_FLOW",
+        "Description": "A simple welcome contact flow",
+        "Content": { "Fn::Sub": "${file(\"templates/immawalts_contact_flow.json\")}" }
       }
     }
   },
   "Outputs": {
     "ConnectInstanceId": {
       "Description": "Amazon Connect Instance ID",
-      "Value": {
-        "Ref": "ConnectInstance"
-      }
+      "Value": { "Ref": "ConnectInstance" }
     },
     "ConnectInstanceArn": {
       "Description": "Amazon Connect Instance ARN",
-      "Value": {
-        "Fn::GetAtt": [
-          "ConnectInstance",
-          "Arn"
-        ]
-      }
+      "Value": { "Fn::GetAtt": ["ConnectInstance", "Arn"] }
+    },
+    "ImmawaltsContactFlowId": {
+      "Description": "ID of the Simple Contact Flow",
+      "Value": { "Ref": "ImmawaltsContactFlow" }
     }
   }
 }
