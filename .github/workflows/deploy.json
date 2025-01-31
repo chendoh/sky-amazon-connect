@@ -1,0 +1,33 @@
+{
+  "name": "Deploy Amazon Connect with CloudFormation",
+  "on": {
+    "push": {
+      "branches": ["main"]
+    },
+    "workflow_dispatch": {}
+  },
+  "jobs": {
+    "deploy": {
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "name": "Checkout Repository",
+          "uses": "actions/checkout@v3"
+        },
+        {
+          "name": "Configure AWS Credentials",
+          "uses": "aws-actions/configure-aws-credentials@v3",
+          "with": {
+            "aws-access-key-id": "${{ secrets.AWS_ACCESS_KEY_ID }}",
+            "aws-secret-access-key": "${{ secrets.AWS_SECRET_ACCESS_KEY }}",
+            "aws-region": "us-east-1"
+          }
+        },
+        {
+          "name": "Deploy CloudFormation Stack",
+          "run": "aws cloudformation deploy --stack-name amazon-connect-stack --template-file templates/instance.json --capabilities CAPABILITY_NAMED_IAM"
+        }
+      ]
+    }
+  }
+}

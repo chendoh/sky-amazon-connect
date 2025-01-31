@@ -1,7 +1,11 @@
-- name: Deploy CloudFormation Stack with Parameters
-run: |
-  aws cloudformation deploy \
-    --stack-name amazon-connect-stack \
-    --template-file templates/instance.yaml \
-    --capabilities CAPABILITY_NAMED_IAM \
-    --parameter-overrides file://parameters.json
+[
+    {
+      "ParameterKey": "InstanceAlias",
+      "ParameterValue": "my-connect-instance"
+    },
+    {
+      "ParameterKey": "IdentityManagementType",
+      "ParameterValue": "CONNECT_MANAGED"
+    }
+  ]
+  

@@ -1,0 +1,35 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Create an Amazon Connect Instance",
+  "Resources": {
+    "ConnectInstance": {
+      "Type": "AWS::Connect::Instance",
+      "Properties": {
+        "IdentityManagementType": "CONNECT_MANAGED",
+        "InstanceAlias": "my-connect-instance",
+        "Attributes": {
+          "InboundCalls": true,
+          "OutboundCalls": true,
+          "ContactLens": false
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ConnectInstanceId": {
+      "Description": "Amazon Connect Instance ID",
+      "Value": {
+        "Ref": "ConnectInstance"
+      }
+    },
+    "ConnectInstanceArn": {
+      "Description": "Amazon Connect Instance ARN",
+      "Value": {
+        "Fn::GetAtt": [
+          "ConnectInstance",
+          "Arn"
+        ]
+      }
+    }
+  }
+}
