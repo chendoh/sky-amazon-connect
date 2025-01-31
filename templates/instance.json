@@ -9,7 +9,7 @@
         "InstanceAlias": "my-connect-instance",
         "Attributes": {
           "InboundCalls": true,
-          "OutboundCalls": true,
+          "OutboundCalls": false,
           "ContactLens": false
         }
       }
