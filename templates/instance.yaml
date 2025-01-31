@@ -6,15 +6,13 @@ Resources:
     Type: AWS::Connect::Instance
     Properties:
       IdentityManagementType: "CONNECT_MANAGED"  # Amazon Connect manages users
-      InstanceAlias: "my-connect-instance"  # Change to your alias
-      AutoEnableContactLens: true  # Enables Contact Lens (optional)
-      InboundCallsEnabled: true  # Allow inbound calls
-      OutboundCallsEnabled: true  # Allow outbound calls
+      InstanceAlias: "immawalts-connect-instance"  # Change to your desired alias
 
 Outputs:
   ConnectInstanceId:
     Description: Amazon Connect Instance ID
     Value: !Ref ConnectInstance
+
   ConnectInstanceArn:
     Description: Amazon Connect Instance ARN
     Value: !GetAtt ConnectInstance.Arn
